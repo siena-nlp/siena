@@ -1,0 +1,23 @@
+.context-menu {
+    text-align: center;
+    box-sizing: content-box;
+    display: none;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    font-size: 0.9em;
+    z-index: 1;
+    position: absolute;
+    background-color: #252526;
+}
+
+.context-menu-list {
+    list-style-type: none;
+    cursor: context-menu;
+}
+.context-menu-list-item{
+    padding-left: 1em;
+    padding-right: 1em;
+    margin: 1px;
+}
+.context-menu-list-item:hover{
+    background-color: #094771;
+}

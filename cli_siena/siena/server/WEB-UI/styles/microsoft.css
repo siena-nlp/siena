@@ -1,0 +1,11 @@
+.ms-inline{
+  width: 1em;
+  vertical-align: middle;
+  display: inline-block;
+}
+
+.ms-inline-small{
+  width: 1em;
+  vertical-align: middle;
+  display: inline-block;
+}

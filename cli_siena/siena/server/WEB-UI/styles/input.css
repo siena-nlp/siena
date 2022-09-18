@@ -1,0 +1,18 @@
+input[type="text"], textarea {
+  background-color : #3c3c3c;
+  border:1px solid #3c3c3c;
+  box-sizing: border-box;
+  border-radius: 0px;
+  margin: 1px;
+  padding: 1px;
+}
+
+input[type=text]:focus , textarea:focus {
+  outline: none;
+  background-color : #3c3c3c;
+  border:1px solid #007acc;
+  box-sizing: border-box;
+  border-radius: 0px;
+  margin: 1px;
+  padding: 1px;
+}

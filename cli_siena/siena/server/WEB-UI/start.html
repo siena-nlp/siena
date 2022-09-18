@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='./styles/start.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='./styles/input.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='./styles/microsoft.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='./assets/logo.png') }}" type="image/x-icon">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="{{ url_for('static', filename='./scripts/session.js') }}"></script>
+    <link rel="stylesheet" href="https://static2.sharepointonline.com/files/fabric/office-ui-fabric-core/9.6.1/css/fabric.min.css">
+    <title>SIENA - Start</title>
+    
+</head>
+
+<body>
+    <header>
+    </header>
+    <main>
+        <div class="banner" id="start-step-1" style="display: block;">
+            <p class="heading">Select an option</p>
+            <div class="tile" id="start-step-1-new-project">Upload new file</div>
+            <div class="tile" id="start-step-1-existing-project" >Continue to SIENA</div>
+        </div>
+
+        <form action="POST" enctype="multipart/form-data" id="start-step-3-file-upload-form" style="display: none;">
+            <div class="banner" id="start-step-2">
+                <p class="heading">Upload corpus into the server</p>
+                <div onclick="openFileUploader();" class="tile" for="file-upload" style="text-align: center;"><i class="ms-Icon ms-inline ms-font-xl ms-Icon--CloudUpload ms-fontColor-white"></i>&nbsp;Upload data</div>
+                <input id="start-step-3-file-upload" type="file" accept=".yml,.yaml" name="file"/>
+                <i id="start-step-3-file-upload-done" class="ms-Icon ms-inline ms-font-xl ms-Icon--Accept ms-fontColor-white"></i>
+                <div class="windows8" id="start-step-3-loading-animation" style="display: none;">
+                    <div class="wBall" id="wBall_1">
+                        <div class="wInnerBall"></div>
+                    </div>
+                    <div class="wBall" id="wBall_2">
+                        <div class="wInnerBall"></div>
+                    </div>
+                    <div class="wBall" id="wBall_3">
+                        <div class="wInnerBall"></div>
+                    </div>
+                    <div class="wBall" id="wBall_4">
+                        <div class="wInnerBall"></div>
+                    </div>
+                    <div class="wBall" id="wBall_5">
+                        <div class="wInnerBall"></div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <div class="banner" id="start-step-4" style="display: none;">
+            <p class="heading">File uploaded sucessfully</p>
+            <a href="{{ url_for('siena') }}"><div class="tile">Continue to SIENA</div></a>
+        </div>
+        <div class="banner" id="start-step-5" style="display: none;">
+            <p class="heading">Select a project</p>
+            <div class="tile" name="start-step-5-project-tile-loading" data-project-id="" id="start-step-5-loading">Loading...</div>
+        </div>
+    </main>
+    <input type="hidden" id="siena-selected-project-name" value="">
+    <input type="hidden" id="siena-selected-project-type" value="">
+    <script src="{{ url_for('static', filename='./scripts/start.js') }}"></script>
+</body>
+</html>
