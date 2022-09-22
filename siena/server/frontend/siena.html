@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/iziToast.min.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/scrollbar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/siena.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/microsoft.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/card.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/input.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/context_menu.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='assets/logo.png') }}" type="image/x-icon">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="{{ url_for('static', filename='scripts/session.js') }}"></script>
+    <link rel="stylesheet"
+        href="https://static2.sharepointonline.com/files/fabric/office-ui-fabric-core/9.6.1/css/fabric.min.css">
+    <title>SIENA • Tagging tool</title>
+</head>
+
+<body>
+    <header>
+        <div class="container">
+        <div class="icon"></div>
+            <ul>
+                <li id="siena-project-export">Save as RASA NLU data</li>
+                <li id="siena-knowledge-import">Import knowledge base</li>
+                <li id="siena-knowledge-export" data-toggle="modal" data-target="#exampleModal">Export knowledge base</li>
+            </ul>
+        </div>
+        <div class="namespace">SIENA</div>
+        <div class="options">
+            <div class="minimize">
+                <div class="line"></div>
+            </div>
+            <div class="maximize">
+                <div class="cube"></div>
+            </div>
+            <div class="closed">
+                <div class="icon"></div>
+            </div>
+        </div>
+    </header>
+    <main>
+        <div class="list-files">
+            <ul>
+                <li class="tab-files active" >
+                    <img src="{{ url_for('static', filename='assets/file-solid.png') }}" width="8em" height="12em" />
+                    <span id="siena-workspace-filename-title">Loading...</span>
+                </li>
+                <!-- <li class="tab-files active" id="siena-workspace-previous">
+                    <span>
+                        <i class="ms-Icon ms-inline ms-font-m ms-Icon--CaretLeftSolid8 ms-fontColor-green"></i>
+                    </span>
+                </li>
+                <li class="tab-files active" id="siena-workspace-next">
+                    <span>
+                        <i class="ms-Icon ms-inline ms-font-m ms-Icon--CaretSolidRight ms-fontColor-green"></i>
+                    </span>
+                </li> -->
+            </ul>
+        </div>
+        <div class="file-open no-select" data-file-name="TEXT" style="display: block;" id="file-open-window">
+            <div class="windows8">
+                <div class="wBall" id="wBall_1">
+                    <div class="wInnerBall"></div>
+                </div>
+                <div class="wBall" id="wBall_2">
+                    <div class="wInnerBall"></div>
+                </div>
+                <div class="wBall" id="wBall_3">
+                    <div class="wInnerBall"></div>
+                </div>
+                <div class="wBall" id="wBall_4">
+                    <div class="wInnerBall"></div>
+                </div>
+                <div class="wBall" id="wBall_5">
+                    <div class="wInnerBall"></div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+    <aside id="siena-entity-side-window">
+        <div class="explorer">
+            <div class="content">ENTITIES</div>
+        </div>
+        <ul class="options" id="siena-entity-list">
+        </ul>
+        <div class="entity-controllers">
+            <div class="siena-btn-tile" id="add-new-entity"> Add new entity</div>
+        </div>
+    </aside>
+    <aside id="siena-files-side-window" style="display: none;">
+        <div class="explorer">
+            <div class="content">FILES</div>
+        </div>
+        <ul class="options" id="siena-file-list">
+        </ul>
+    </aside>
+    <aside id="siena-knowledge-side-window" style="display: none;">
+        <div class="explorer">
+            <div class="content">KNOWLEDGE</div>
+        </div>
+        <ul class="options" id="siena-knowledge-explorer">
+        </ul>
+    </aside>
+    <section>
+        <ul class="workspace">
+            <li class="active" id="siena-side-bar-icon-entities">
+                <span class="material-icons" style="font-size: 1.6rem;margin-top: 0.5em;margin-bottom: 0.5em;">text_snippet</span>
+            </li>
+            <li class="non-active" id="siena-side-bar-icon-files">
+                <span class="material-icons" style="font-size: 1.6rem;margin-top: 0.5em;margin-bottom: 0.5em;">folder</span>
+            </li>
+            <li class="non-active" id="siena-side-bar-icon-knowlegde">
+                <span class="material-icons" style="font-size: 1.5rem;margin-top: 0.5em;margin-bottom: 0.5em;">published_with_changes</span>
+            </li>
+        </ul>
+        <ul class="config">
+            <li><span></span></li>
+            <li><span></span></li>
+        </ul>
+    </section>
+    <form style="display: none;">
+        <input type="hidden" id="siena-workspace-previous-value" value="1">
+        <input type="hidden" id="siena-workspace-next-value" value="3">
+        <input type="hidden" id="siena-selected-file-id" value="">
+        <input id="knowledge-file-upload" type="file" accept=".csv" name="file" style="display:none"/>
+    </form>
+    <!--
+        Z Index 1 area
+    -->
+    <div class="context-menu" id="context-menu-id" data-for-word="">
+        <ul class="context-menu-list" id="context-menu-entity-list">
+            <li class="context-menu-list-item" name="context-menu-entity-item-loading">Loading...</li>
+        </ul>
+    </div>
+
+        <div class="alert notification-menu-grid-container" id="notification-popup">
+            <span class="closebtn notification-menu-grid-item" onclick="this.parentElement.style.display='none';">&times;</span>
+            <strong id="notification-popup-title notification-menu-grid-item"></strong><p id="notification-popup-text"></p>
+          </div>
+
+    
+</body>
+<div class="banner-background no-select" style="display: none;" id="siena-manage-entities" data-list-index="0">
+    <div class="banner" >
+        <p class="heading" style="text-align: center;">Manage entities</p>
+        <div class="entity-manager-form">
+            <form>
+                <div class="form-goup">
+                    <label class="form-item" for="entity-name">Entity name</label>
+                    <p style="color:#939393;padding: 5px;">In a given user message, the thing that a user is trying to convey or accomplish (e,g., greeting, specifying a location).</p>
+                    <input class="form-item" type="text" id="manage-entity-name">
+                </div>
+                <div class="form-goup">
+                    <label class="form-item" for="entity-replacer-name">Value name</label>
+                    <p style="color:#939393;padding: 5px;">In hear you can provide a value for the entity</p>
+                    <input class="form-item" type="text" id="manage-entity-replacer-name">
+                </div>
+                <div class="form-goup" style="visibility:hidden">
+                    <label class="form-item" for="entity-colour">Colour</label>
+                    <input type="color" class="form-item" id="manage-entity-colour" data-coloris>
+                </div>
+
+            </form>
+        </div>
+        <div class="siena-manage-entities-btn-list manage-entities-grid-container">
+            <div class="grid-item">
+                <div class="btn" id="siena-manage-entities-btn-done">Save</div>
+            </div>
+            <div class="grid-item">
+                <div class="btn" id="siena-manage-entities-btn-cancel">Cancel</div>
+            </div>
+            <div class="grid-item">
+                <div class="btn" id="siena-manage-entities-btn-delete" style="display: none;">Delete</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<script src="{{ url_for('static', filename='scripts/siena.js') }}"></script>
+<script src="{{ url_for('static', filename='scripts/session.js') }}"></script>
+<script src="{{ url_for('static', filename='scripts/iziToast.min.js') }}"></script>
+</html>

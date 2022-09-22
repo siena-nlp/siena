@@ -1,0 +1,2 @@
+class SIENABaseException(Exception):
+    pass

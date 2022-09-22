@@ -1,0 +1,9 @@
+beautifulsoup4==4.11.1
+flask>=2.1.2
+Flask-Cors==3.0.10
+Flask-WTF==1.0.1
+nltk==3.6.3
+pandas==1.4.3
+waitress>=2.1.2
+rasa~=2.8.8
+ruamel.yaml<0.17.0,>=0.16.5
