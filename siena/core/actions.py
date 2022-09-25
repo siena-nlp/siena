@@ -271,7 +271,6 @@ def init_project(uploads: bool = True, exports: bool = True, cache: bool = True)
 
     fle = Path(SIENA_ENTITIES_PATH)
     fle.touch(exist_ok=True)
-
     fle = Path(SIENA_IN_PROGRESS_PATH)
     fle.touch(exist_ok=True)
 
@@ -394,7 +393,7 @@ def insert_entities_for_project(entities):
         text = ""
         try:
             for line in entities:
-                row = line[COLUMN_NAME_ENTITY] + \
+                row = line['ENTITY_NAME'] + \
                       ":" + \
                       line['ENTITY_REPLACER'] + \
                       SEP_TAG + line['ENTITY_COLOR'] + \
@@ -636,14 +635,10 @@ def is_valid_nlu_yaml(path_to_file):
     with open(path_to_file, FilePermission.READ, encoding=Encoding.UTF8) as stream:
         try:
             data = yaml.safe_load(stream)
-            f = open(SIENA_IN_PROGRESS_PATH, FilePermission.WRITE_PLUS)
-            f.write("")
-            f.close()
+            if DEFAULT_NLU_YAML_TAG in data.keys():
+                if data[DEFAULT_NLU_YAML_TAG] != None:
+                    return True
         except yaml.YAMLError as e:
             logger.exception(f"Exception occurred. {e}")
             return False
-
-    if DEFAULT_NLU_YAML_TAG in data.keys():
-        if data[DEFAULT_NLU_YAML_TAG] != None:
-            return True
     return False

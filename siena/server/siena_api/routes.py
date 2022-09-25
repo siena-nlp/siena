@@ -39,6 +39,7 @@ from siena.shared.constants import (
     SIENA_KNOWLEDGE_BASE_PATH,
     LOOKUP_DIR,
     UPLOAD_FOLDER,
+    SIENA_IN_PROGRESS_PATH,
 )
 
 logger = logging.getLogger(__name__)
@@ -86,7 +87,7 @@ def endpoint_sentences():
         response = {}
         data = []
         if request.method == 'GET':
-            with open("siena_cache/inprogress.SIENA", "r", encoding='utf-8') as file:
+            with open(SIENA_IN_PROGRESS_PATH, "r", encoding='utf-8') as file:
                 line_id = 0
                 while line := file.readline().rstrip():
                     row = {}

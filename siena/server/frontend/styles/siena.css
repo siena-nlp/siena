@@ -1077,8 +1077,8 @@ section .config li:not(:first-child) {
   position: relative;
   z-index: 1;
   padding: 5px;
-  width: 45%;
-  height: 60%;
+  width: 40%;
+  height: auto;
   background-color: #252526;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   position: absolute;
@@ -1107,15 +1107,12 @@ div.btn:hover {
 }
 
 .siena-manage-entities-btn-list{
-  position: absolute;
-  margin-top: auto;
-  display: inline;
-  bottom: 2em;
+  padding: 0.5em;
 }
 
-.grid-container {
+.manage-entities-grid-container {
   display: grid;
-  grid-template-columns: auto auto;
+  grid-template-columns: auto auto auto;
 }
 .grid-item {
   text-align: center;
