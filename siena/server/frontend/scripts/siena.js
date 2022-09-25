@@ -705,6 +705,93 @@ $(document).on('click', `li[name="siena-base-word-list"]`, function () {
     return true;
 });
 
+$(document).on('click', `#siena-project-export`, function () {
+    $('#file-open-window').html(`
+    <div class="windows8">
+    <div class="wBall" id="wBall_1">
+        <div class="wInnerBall"></div>
+    </div>
+    <div class="wBall" id="wBall_2">
+        <div class="wInnerBall"></div>
+    </div>
+    <div class="wBall" id="wBall_3">
+        <div class="wInnerBall"></div>
+    </div>
+    <div class="wBall" id="wBall_4">
+        <div class="wInnerBall"></div>
+    </div>
+    <div class="wBall" id="wBall_5">
+        <div class="wInnerBall"></div>
+    </div>
+</div>
+    `);
+    $.ajax({
+        url: "/api/siena/save",
+        type: 'GET',
+        cache: false,
+        data: {
+        },
+        success: function (response) {
+            makeNotification("Success","Annotation file exported");
+            getSentenses();
+            return true;
+
+        },
+        error: function (err) {
+            makeNotification("Error","Error occurred while processing your request");
+        }
+    });
+
+    return true;
+});
+
+// knowledge file upload
+$("#siena-knowledge-import").on("click", function (evt) {
+    document.getElementById('knowledge-file-upload').click();
+    knowledgeUploadHandler()
+});
+
+function knowledgeUploadHandler(){
+    if (document.getElementById("knowledge-file-upload").files.length == 1) {
+        var documentData = new FormData();
+        documentData.append('file', $('#knowledge-file-upload')[0].files[0]);
+        $.ajax({
+        url: "/api/siena/knowledge/upload",
+        type: 'POST',
+        data: documentData,
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function (response) {
+            makeNotification("Success","Knowledge base uploaded");
+        },
+        error: function (err) {
+            makeNotification("Error","Error occurred while processing your request");
+        }
+        });
+    } else {
+        setTimeout(knowledgeUploadHandler,1000);
+    }
+    return true;
+}
+
+// knowledge file export
+$("#siena-knowledge-export").on("click", function (evt) {
+    fetch('/api/siena/knowledge/export')
+    .then(resp => resp.blob())
+    .then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        // the filename you want
+        a.download = `knowledge-${Date.now()}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        makeNotification("Success","Knowledge base exported");
+    })
+});
 
 function makeNotification(titleText,msgText){
     iziToast.show({

@@ -1,4 +1,4 @@
-# SIENA 0.0.1a4 Release
+# SIENA 1.0.0 Release
 ### Efficient entity annotation tool for Sinhala, English, or Sinhala-English code-switched text corpora.
 ## Features
 - Allows annotating both Sinhala and English textual data
@@ -17,5 +17,5 @@
 - Benchmark tests are in progress
 
 📒 Docs: https://siena-nlp.github.io  
-📦 PyPi: https://pypi.org/project/siena/0.0.1a4/  
-🪵 Full Changelog: Refer the relevant GitHub branch (v0.0.1a4) 
+📦 PyPi: https://pypi.org/project/siena/1.0.0/  
+🪵 Full Changelog: Refer the relevant GitHub branch (v1.0.0) 
