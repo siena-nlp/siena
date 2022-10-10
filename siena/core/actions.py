@@ -13,6 +13,7 @@ from nltk.stem.porter import *
 from ruamel import yaml
 from ruamel.yaml import YAML
 from ruamel.yaml.scalarstring import PreservedScalarString
+import re
 
 from siena.shared.constants import (
     ALLOWED_EXTENSIONS_KNOWLEDGE,
@@ -35,7 +36,13 @@ from siena.shared.constants import (
     DEFAULT_NLU_INTENT_TAG,
     DEFAULT_NLU_EXAMPLES_TAG,
     DEFAULT_NLU_YAML_VERSION,
-    SIENA_TEMP_KNOWLEDGE_BASE_PATH
+    SIENA_TEMP_KNOWLEDGE_BASE_PATH,
+    UPLOAD_FOLDER,
+    LOOKUP_DIR,
+    WELCOME_NLU_PATH,
+    WELCOME_NLU,
+    SIENA_CONFIG_INITIAL_TEMPLATE,
+    INPROGRESS_INIT,
 )
 
 from siena.core.similarity import (
@@ -266,13 +273,20 @@ def init_project(uploads: bool = True, exports: bool = True, cache: bool = True)
     if cache:
         Path("siena_cache").mkdir(parents=True, exist_ok=True)
 
-    fle = Path(SIENA_CONFIG_PATH)
-    fle.touch(exist_ok=True)
+    if not (os.path.isfile(WELCOME_NLU_PATH)):
+        with open(WELCOME_NLU_PATH, FilePermission.WRITE, encoding=Encoding.UTF8) as file:
+            file.write(WELCOME_NLU)
+
+    if not (os.path.isfile(SIENA_CONFIG_PATH)):
+        with open(SIENA_CONFIG_PATH, FilePermission.WRITE, encoding=Encoding.UTF8) as file:
+            file.write(SIENA_CONFIG_INITIAL_TEMPLATE)
 
     fle = Path(SIENA_ENTITIES_PATH)
     fle.touch(exist_ok=True)
-    fle = Path(SIENA_IN_PROGRESS_PATH)
-    fle.touch(exist_ok=True)
+
+    if not (os.path.isfile(SIENA_IN_PROGRESS_PATH)):
+        with open(SIENA_IN_PROGRESS_PATH, FilePermission.WRITE, encoding=Encoding.UTF8) as file:
+            file.write(INPROGRESS_INIT)
 
     return True
 
@@ -635,6 +649,8 @@ def is_valid_nlu_yaml(path_to_file):
     with open(path_to_file, FilePermission.READ, encoding=Encoding.UTF8) as stream:
         try:
             data = yaml.safe_load(stream)
+            if type(data) is not dict:
+                return False
             if DEFAULT_NLU_YAML_TAG in data.keys():
                 if data[DEFAULT_NLU_YAML_TAG] != None:
                     return True
@@ -642,3 +658,75 @@ def is_valid_nlu_yaml(path_to_file):
             logger.exception(f"Exception occurred. {e}")
             return False
     return False
+
+def get_valid_nlu_files():
+        data = {}
+        data["FILES"] = []
+        # in bot folder
+        for root, dir_names, filenames in os.walk(LOOKUP_DIR):
+            for filename in filenames:
+                if filename.endswith(('.YAML', '.YML', '.yaml', '.yml')):
+                    files = {}
+                    abs_path = os.path.join(root, filename)
+                    rel_path = abs_path.replace("\\", "/")
+                    if not is_valid_nlu_yaml(rel_path):
+                        continue
+                    files["PATH"] = rel_path
+                    files["NAME"] = filename
+                    data["FILES"].append(files)
+        # in uploads folder
+        for root, dir_names, filenames in os.walk(UPLOAD_FOLDER):
+            for filename in filenames:
+                if filename.endswith(('.YAML', '.YML', '.yaml', '.yml')):
+                    files = {}
+                    abs_path = os.path.join(root, filename)
+                    rel_path = abs_path.replace("\\", "/")
+                    if not is_valid_nlu_yaml(rel_path):
+                        continue
+                    files["PATH"] = rel_path
+                    files["NAME"] = filename
+                    data["FILES"].append(files)
+
+        return data
+
+
+def delete_entity(nlu_files:list,entity:str,value:str)->None:
+    print("SECTION STARTED")
+    phrase_e ='{"entity":"'+entity+'","value":"'+value+'"}'
+    phrase = "\[.*]" + phrase_e
+    for file in nlu_files:
+        file_ = file["PATH"]
+        document = ""
+        with open(file_, FilePermission.READ, encoding=Encoding.UTF8) as fileio:
+            try:
+                # read
+                document = fileio.read()
+            except Exception as e:
+                logger.exception(f"Exception occurred. {e}")
+        # write
+        findings = re.findall(phrase, document)
+        for find_ in findings:
+            word = find_.replace(phrase_e,"")
+            word = word.replace("[","")
+            word = word.replace("]","")
+            document = document.replace(find_,word)
+        with open(file_, FilePermission.WRITE, encoding=Encoding.UTF8) as fileio:
+            try:
+                fileio.write(document)
+            except Exception as e:
+                logger.exception(f"Exception occurred. {e}")
+
+    # delete from kb
+    global knowledge
+    knowledge = knowledge.drop(knowledge[knowledge[COLUMN_NAME_ENTITY] == f"{entity}:{value}"].index)
+    knowledge.to_csv(SIENA_KNOWLEDGE_BASE_PATH)
+    # delete from entity file
+    # read
+    data = get_entities_by_project()
+    data_ = []
+    for line in data:
+        if (line["ENTITY_NAME"] == entity) and (line["ENTITY_REPLACER"] == value):
+            pass
+        else:
+            data_.append(line)   
+    insert_entities_for_project(data_)

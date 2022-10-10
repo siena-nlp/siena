@@ -1,4 +1,4 @@
-# SIENA 1.0.0 Release
+# SIENA 1.0.1 Release
 ### Efficient entity annotation tool for Sinhala, English, or Sinhala-English code-switched text corpora.
 ## Features
 - Allows annotating both Sinhala and English textual data

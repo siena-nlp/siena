@@ -3,7 +3,7 @@ import os
 # SIENA PACKAGE
 PACKAGE_NAME_PYPI = "siena"
 PACKAGE_NAME_GITHUB = "siena-nlp"
-PACKAGE_VERSION = "1.0.0"
+PACKAGE_VERSION = "1.0.1"
 
 # SIENA SERVER
 DEFAULT_SERVER_HOST = "localhost"
@@ -128,6 +128,17 @@ SIENA_CONFIG_PATH = os.path.join(SIENA_CACHE_PATH, "config.SIENA")
 SEP_TAG = "<sep>"
 NEW_LINE_TAG = "\n"
 UNDEFINED_TAG = "undefined"
+WELCOME_NLU_PATH = os.path.join(SIENA_CACHE_PATH,"welcome.yaml")
+WELCOME_NLU = """version: "2.0"
+
+nlu:
+- intent: sample
+  examples: |
+    - Welcome to SIENA. Please select NLU files in sidebar"""
+SIENA_CONFIG_INITIAL_TEMPLATE = f"""file_name=welcome.yml
+file_path={WELCOME_NLU_PATH}
+"""
+INPROGRESS_INIT = "sample<sep>Welcome to SIENA. Please select NLU files in sidebar"
 
 VOWELS_MAPPER = {
     '': '',

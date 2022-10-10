@@ -34,6 +34,8 @@ from siena.core.actions import (
     get_projects,
     validate_tempory_knowledge_base,
     is_valid_nlu_yaml,
+    get_valid_nlu_files,
+    delete_entity
 )
 from siena.shared.constants import (
     SIENA_KNOWLEDGE_BASE_PATH,
@@ -135,7 +137,7 @@ def endpoint_sentences():
 
 
 #  API for entity management
-@blueprint.route('/entity', methods=['GET', 'POST'])
+@blueprint.route('/entity', methods=['GET', 'POST','DELETE'])
 def endpoint_entity():
     try:
         logger.debug("Entity API endpoint was called")
@@ -149,6 +151,15 @@ def endpoint_entity():
             insert_entities_for_project(entities)
             data['messege'] = "Updated"
             return data
+        elif request.method == 'DELETE':
+            post_data = request.json
+            entity = post_data['data']
+            entity_value = post_data['value']
+            all_nlu_files = get_valid_nlu_files()["FILES"]
+            delete_entity(all_nlu_files,entity,entity_value)
+            return {"status": "success"}, 200
+            
+
         else:
             return 'bad request!', 400
     except Exception as e:
@@ -325,32 +336,7 @@ def endpoint_navigation():
         global LOOKUP_DIR
         data = {}
         if request.method == 'GET':
-            data["FILES"] = []
-            # in bot folder
-            for root, dir_names, filenames in os.walk(LOOKUP_DIR):
-                for filename in filenames:
-                    if filename.endswith(('.YAML', '.YML', '.yaml', '.yml')):
-                        files = {}
-                        abs_path = os.path.join(root, filename)
-                        rel_path = abs_path.replace("\\", "/")
-                        if not is_valid_nlu_yaml(rel_path):
-                            continue
-                        files["PATH"] = rel_path
-                        files["NAME"] = filename
-                        data["FILES"].append(files)
-            # in uploads folder
-            for root, dir_names, filenames in os.walk(UPLOAD_FOLDER):
-                for filename in filenames:
-                    if filename.endswith(('.YAML', '.YML', '.yaml', '.yml')):
-                        files = {}
-                        abs_path = os.path.join(root, filename)
-                        rel_path = abs_path.replace("\\", "/")
-                        if not is_valid_nlu_yaml(rel_path):
-                            continue
-                        files["PATH"] = rel_path
-                        files["NAME"] = filename
-                        data["FILES"].append(files)
-
+            data = get_valid_nlu_files()
             return JSONEncoder().encode(data)
         else:
             return {"status": "error", "response": "bad request!"}, 400
