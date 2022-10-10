@@ -216,7 +216,7 @@ $(function () {
     });
 });
 
-$(document).ready(function () {
+function showEntities(){
     $.ajax({
         url: "/api/siena/entity",
         type: 'GET',
@@ -239,6 +239,10 @@ $(document).ready(function () {
             makeNotification("Error","Error occurred while processing your request")
         }
     });
+}
+
+$(document).ready(function () {
+    showEntities()
 
     $.ajax({
         url: "/api/siena/file",
@@ -801,3 +805,31 @@ function makeNotification(titleText,msgText){
         message: msgText,
     });
 }
+
+// delete entity
+$(document).on('click', `#siena-manage-entities-btn-delete`, function () {
+    reqdata = {}
+    reqdata.data = $("#manage-entity-name").val()
+    reqdata.value =  $("#manage-entity-replacer-name").val()
+    $.ajax({
+        url: "/api/siena/entity",
+        type: 'DELETE',
+        data: JSON.stringify(reqdata),
+        cache: false,
+        contentType: 'application/json',
+        processData: false,
+        success: function (response) {
+            makeNotification("Success","Name entity removed from all documents");
+            $("#manage-entity-name").val("")
+            $("#manage-entity-replacer-name").val("")
+            showEntities()
+            $('#siena-manage-entities').hide();
+
+        },
+        error: function (err) {
+            makeNotification("Error","Error occurred while processing your request");
+        }
+        });
+
+});
+
