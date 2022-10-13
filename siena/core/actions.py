@@ -333,9 +333,14 @@ def auto_annotate(base_form: str, entity: str) -> bool:
             n_grams_len = len(n_grams) - 1
             re_word = ""
             auto_annotate_mapper = {}
-
+            terminator_flag = 0
             for index, element in enumerate(n_grams):
+                if terminator_flag == 1:
+                    terminator_flag = 0
+                    continue
+                # 
                 if base_form == base_form_convetor(element):
+                    terminator_flag = 1
                     auto_annotate_count += 1
                     tag = f"<div class='card-highlighted-text' name='highlighted' data='{entity}'>" \
                           f"{element}<span class='card-highlighted-text-close' style='visibility: hidden;'>" \
@@ -349,8 +354,9 @@ def auto_annotate(base_form: str, entity: str) -> bool:
                     # last element
                     re_word = f"{re_word} {element}"
                 else:
-                    re_word = f"{re_word} {element.split()[0]}"
-
+                    re_word = f"{re_word} {element.split(' ')[0]}"
+                    
+                        
             # re-constructed word line with hash
             re_word = re_word.strip()
             re_word = " ".join(re_word.split())

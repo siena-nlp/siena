@@ -7,6 +7,10 @@ from setuptools import (
 from siena.shared.constants import (
     PACKAGE_VERSION,
     PACKAGE_NAME_PYPI,
+    REQUIREMENTS,
+    README_PYPI,
+    Encoding,
+    FilePermission,
 )
 
 logger = logging.getLogger(__name__)
@@ -16,10 +20,10 @@ requirements = None
 long_description = None
 
 try:
-    with open("README.md", "r") as fh:
+    with open(README_PYPI, FilePermission.READ) as fh:
         long_description = fh.read()
 
-    with open("requirements.txt", mode="r", encoding="utf8") as requirements_file:
+    with open(REQUIREMENTS, mode=FilePermission.READ, encoding=Encoding.UTF8) as requirements_file:
         requirements = requirements_file.readlines()
     requirements = [str.strip(req) for req in requirements]
 
