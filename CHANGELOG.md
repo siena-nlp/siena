@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](https://semver.org/) starting with version 0.0.1a1
 
-## [1.0.2] - 2022-10-xx [unreleased]
+## [1.0.2] - 2022-10-13
 ### Bugfixes
 - fixed a issue in auto annotation
 
