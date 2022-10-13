@@ -3,7 +3,9 @@ import os
 # SIENA PACKAGE
 PACKAGE_NAME_PYPI = "siena"
 PACKAGE_NAME_GITHUB = "siena-nlp"
-PACKAGE_VERSION = "1.0.1"
+PACKAGE_VERSION = "1.0.2"
+REQUIREMENTS = "requirements.txt"
+README_PYPI = "READMEPyPI.md"
 
 # SIENA SERVER
 DEFAULT_SERVER_HOST = "localhost"
@@ -16,7 +18,7 @@ ASCII_LOGO = """
 """
 
 # RASA
-DEFAULT_DATA_PATH = "./data"
+DEFAULT_DATA_PATH = "data"
 YAML_EXTENSIONS = [".yml", ".yaml"]
 DEFAULT_NLU_YAML_VERSION = "2.0"
 DEFAULT_NLU_YAML_TAG = "nlu"
@@ -119,7 +121,7 @@ LOOKUP_DIR = "data"
 UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS_NLU = {'yml', 'yaml'}
 ALLOWED_EXTENSIONS_KNOWLEDGE = {'csv', 'CSV'}
-SIENA_CACHE_PATH = "./siena_cache"
+SIENA_CACHE_PATH = "siena_cache"
 SIENA_KNOWLEDGE_BASE_PATH = os.path.join(SIENA_CACHE_PATH, "knowledge_base.csv")
 SIENA_TEMP_KNOWLEDGE_BASE_PATH = os.path.join(SIENA_CACHE_PATH, "knowledge_base_temp.csv")
 SIENA_IN_PROGRESS_PATH = os.path.join(SIENA_CACHE_PATH, "inprogress.SIENA")
