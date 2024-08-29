@@ -1,6 +1,6 @@
 beautifulsoup4==4.11.1
 flask>=2.1.2
-Flask-Cors==3.0.10
+Flask-Cors==4.0.1
 Flask-WTF==1.0.1
 nltk==3.6.3
 pandas==1.4.3
