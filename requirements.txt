@@ -4,6 +4,8 @@ Flask-Cors==3.0.10
 Flask-WTF==1.0.1
 nltk==3.6.3
 pandas==1.4.3
-waitress>=2.1.2
+waitress>=3.0.1
 rasa~=2.8.8
 ruamel.yaml<0.17.0,>=0.16.5
+urllib3>=2.2.2 # not directly required, pinned by Snyk to avoid a vulnerability
+werkzeug>=3.0.6 # not directly required, pinned by Snyk to avoid a vulnerability
